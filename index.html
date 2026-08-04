@@ -763,10 +763,48 @@
 </footer>
 
 <script>
+  const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/rho044dow3m3la38kqeiuw25wuf23zja';
+
   document.getElementById('quoteForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    alert('Message sent! (Connect this to your Make.com webhook to go live.)');
-    // Example: fetch('YOUR_MAKE_WEBHOOK_URL', { method: 'POST', body: new FormData(this) })
+
+    const form = e.target;
+    const submitBtn = form.querySelector('.btn-submit');
+    const originalBtnText = submitBtn.textContent;
+
+    const data = {
+      name: form.name.value,
+      phone: form.phone.value,
+      service: form.service.value,
+      date: form.date.value,
+      details: form.details.value,
+      submitted_at: new Date().toISOString(),
+      source: 'getmovr.ca quote form'
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    fetch(MAKE_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+      .then(function(response) {
+        if (!response.ok) throw new Error('Network response was not ok');
+        submitBtn.textContent = 'Sent! We\'ll be in touch soon.';
+        form.reset();
+        setTimeout(function() {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+        }, 4000);
+      })
+      .catch(function(err) {
+        console.error('Form submission error:', err);
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+        alert('Something went wrong sending your request. Please call us directly at (437) 988-7234.');
+      });
   });
 </script>
 
