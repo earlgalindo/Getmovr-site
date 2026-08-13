@@ -49,7 +49,7 @@
   <table>
     <thead>
       <tr>
-        <th>ID</th><th>Name</th><th>Contact</th><th>Service</th><th>Date</th><th>Details</th><th>Status</th><th>Received</th>
+        <th>ID</th><th>Name</th><th>Contact</th><th>Service</th><th>Route</th><th>Date</th><th>Details</th><th>Status</th><th>Received</th>
       </tr>
     </thead>
     <tbody id="rows"></tbody>
@@ -65,8 +65,28 @@
   const saved = sessionStorage.getItem('movr_admin_key');
   if (saved) apiKeyInput.value = saved;
 
+  // Lead data comes from a public form, so it is untrusted: escape before it
+  // ever reaches innerHTML, or a submitted <script> runs in the admin's browser.
+  function esc(value) {
+    if (value === null || value === undefined) return '';
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function statusBadge(status) {
-    return `<span class="status status-${status}">${status}</span>`;
+    return `<span class="status status-${esc(status)}">${esc(status)}</span>`;
+  }
+
+  function routeCell(quote) {
+    const from = esc(quote.from_address);
+    const to = esc(quote.to_address);
+    if (!from && !to) return '<span class="muted">—</span>';
+    if (!to) return `${from}<br><span class="muted">pickup only</span>`;
+    return `${from}<br><span class="muted">→ ${to}</span>`;
   }
 
   async function updateStatus(id, status) {
@@ -103,20 +123,21 @@
 
       rowsEl.innerHTML = data.results.map(q => `
         <tr>
-          <td>${q.id}</td>
-          <td>${q.name}</td>
-          <td>${q.phone}<br><span class="muted">${q.email}</span></td>
-          <td>${q.service}</td>
-          <td>${q.preferred_date || '<span class="muted">—</span>'}</td>
-          <td>${(q.details || '').slice(0, 80)}</td>
+          <td>${esc(q.id)}</td>
+          <td>${esc(q.name)}</td>
+          <td>${esc(q.phone)}<br><span class="muted">${esc(q.email)}</span></td>
+          <td>${esc(q.service)}</td>
+          <td>${routeCell(q)}</td>
+          <td>${esc(q.preferred_date) || '<span class="muted">—</span>'}</td>
+          <td>${esc((q.details || '').slice(0, 80))}</td>
           <td>
             ${statusBadge(q.status)}
-            <select onchange="updateStatus(${q.id}, this.value)">
+            <select onchange="updateStatus(${Number(q.id)}, this.value)">
               ${['new','contacted','quoted','booked','closed'].map(s =>
                 `<option value="${s}" ${s === q.status ? 'selected' : ''}>${s}</option>`).join('')}
             </select>
           </td>
-          <td class="muted">${new Date(q.created_at).toLocaleString()}</td>
+          <td class="muted">${esc(new Date(q.created_at).toLocaleString())}</td>
         </tr>
       `).join('');
     } catch (e) {

@@ -50,6 +50,8 @@ test('POST /api/quotes creates a lead, and admin can list/update it', async () =
       phone: '416-555-0100',
       email: 'jane@example.com',
       service: 'moving',
+      from_address: '100 Queen St W, Toronto',
+      to_address: '55 Port St E, Mississauga',
       date: '2026-09-01',
       details: 'Two-bedroom apartment move'
     })
@@ -58,6 +60,8 @@ test('POST /api/quotes creates a lead, and admin can list/update it', async () =
   const created = await createRes.json();
   assert.equal(created.status, 'new');
   assert.ok(created.id);
+  assert.equal(created.from_address, '100 Queen St W, Toronto');
+  assert.equal(created.to_address, '55 Port St E, Mississauga');
 
   // Without an API key, admin endpoints are locked
   const unauthedRes = await fetch(`${baseUrl}/api/quotes`);
@@ -76,4 +80,76 @@ test('POST /api/quotes creates a lead, and admin can list/update it', async () =
   assert.equal(patchRes.status, 200);
   const updated = await patchRes.json();
   assert.equal(updated.status, 'contacted');
+});
+
+test('from_address is required for every service', async () => {
+  const res = await fetch(`${baseUrl}/api/quotes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: 'No Address',
+      phone: '416-555-0101',
+      email: 'noaddress@example.com',
+      service: 'junk'
+    })
+  });
+  assert.equal(res.status, 400);
+  const body = await res.json();
+  assert.ok(body.details.some((d) => d.includes('from_address')));
+});
+
+test('to_address is required for moving and equipment', async () => {
+  for (const service of ['moving', 'equipment']) {
+    const res = await fetch(`${baseUrl}/api/quotes`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Missing Destination',
+        phone: '416-555-0102',
+        email: 'dest@example.com',
+        service,
+        from_address: '100 Queen St W, Toronto'
+      })
+    });
+    assert.equal(res.status, 400, `${service} should require a destination`);
+    const body = await res.json();
+    assert.ok(body.details.some((d) => d.includes('to_address')));
+  }
+});
+
+test('junk removal stores a pickup address and no destination', async () => {
+  const res = await fetch(`${baseUrl}/api/quotes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: 'Junk Customer',
+      phone: '416-555-0103',
+      email: 'junk@example.com',
+      service: 'junk',
+      from_address: '20 Bay St, Toronto',
+      // A destination sent for a pickup-only service is discarded, not stored.
+      to_address: '999 Somewhere Else'
+    })
+  });
+  assert.equal(res.status, 201);
+  const created = await res.json();
+  assert.equal(created.from_address, '20 Bay St, Toronto');
+  assert.equal(created.to_address, null);
+});
+
+test('not-sure accepts a pickup address without a destination', async () => {
+  const res = await fetch(`${baseUrl}/api/quotes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: 'Undecided',
+      phone: '416-555-0104',
+      email: 'undecided@example.com',
+      service: 'not-sure',
+      from_address: '1 Yonge St, Toronto'
+    })
+  });
+  assert.equal(res.status, 201);
+  const created = await res.json();
+  assert.equal(created.to_address, null);
 });

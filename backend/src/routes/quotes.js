@@ -6,6 +6,8 @@ const router = express.Router();
 
 const VALID_SERVICES = ['moving', 'junk', 'equipment', 'not-sure'];
 const VALID_STATUSES = ['new', 'contacted', 'quoted', 'booked', 'closed'];
+// Junk removal is a pickup only — there is no destination to collect.
+const SERVICES_NEEDING_DESTINATION = ['moving', 'equipment'];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function validateQuoteInput(body) {
@@ -14,6 +16,8 @@ function validateQuoteInput(body) {
   const phone = String(body.phone || '').trim();
   const email = String(body.email || '').trim();
   const service = String(body.service || '').trim();
+  const fromAddress = String(body.from_address || '').trim();
+  let toAddress = String(body.to_address || '').trim();
   const preferredDate = body.date ? String(body.date).trim() : null;
   const details = body.details ? String(body.details).trim() : null;
 
@@ -23,8 +27,29 @@ function validateQuoteInput(body) {
   if (!VALID_SERVICES.includes(service)) {
     errors.push(`service must be one of: ${VALID_SERVICES.join(', ')}`);
   }
+  if (!fromAddress) errors.push('from_address is required');
 
-  return { errors, value: { name, phone, email, service, preferredDate, details } };
+  if (service === 'junk') {
+    // Discard any destination sent for a pickup-only service rather than storing
+    // a value the form never meant to collect.
+    toAddress = '';
+  } else if (SERVICES_NEEDING_DESTINATION.includes(service) && !toAddress) {
+    errors.push(`to_address is required for service "${service}"`);
+  }
+
+  return {
+    errors,
+    value: {
+      name,
+      phone,
+      email,
+      service,
+      fromAddress,
+      toAddress: toAddress || null,
+      preferredDate,
+      details
+    }
+  };
 }
 
 // POST /api/quotes — public endpoint used by the site's quote form
@@ -37,9 +62,19 @@ router.post('/', (req, res) => {
   const source = req.body.source ? String(req.body.source).trim() : 'getmovr.ca quote form';
 
   const info = db.run(
-    `INSERT INTO quotes (name, phone, email, service, preferred_date, details, source)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [value.name, value.phone, value.email, value.service, value.preferredDate, value.details, source]
+    `INSERT INTO quotes (name, phone, email, service, from_address, to_address, preferred_date, details, source)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      value.name,
+      value.phone,
+      value.email,
+      value.service,
+      value.fromAddress,
+      value.toAddress,
+      value.preferredDate,
+      value.details,
+      source
+    ]
   );
 
   const created = db.get('SELECT * FROM quotes WHERE id = ?', [info.lastInsertRowid]);

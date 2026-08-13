@@ -787,6 +787,14 @@
         </select>
       </div>
       <div class="form-row">
+        <label for="fromAddress" id="fromAddressLabel">Pickup Address</label>
+        <input type="text" id="fromAddress" name="fromAddress" placeholder="Street address, city" required>
+      </div>
+      <div class="form-row" id="toAddressRow">
+        <label for="toAddress" id="toAddressLabel">Destination Address</label>
+        <input type="text" id="toAddress" name="toAddress" placeholder="Street address, city">
+      </div>
+      <div class="form-row">
         <label for="date">Preferred Date (optional)</label>
         <input type="date" id="date" name="date">
       </div>
@@ -1088,6 +1096,42 @@
   // above still handles the actual form submission.
   const BACKEND_API_URL = '/api/quotes';
 
+  // Address fields adapt to the service: junk removal is a pickup only, so it has
+  // no destination. Labels change per service so "from/to" reads naturally.
+  const ADDRESS_CONFIG = {
+    moving:     { from: 'Moving From',    to: 'Moving To',           showTo: true,  toRequired: true },
+    equipment:  { from: 'Pickup Address', to: 'Delivery Address',    showTo: true,  toRequired: true },
+    junk:       { from: 'Pickup Address', to: null,                  showTo: false, toRequired: false },
+    'not-sure': { from: 'Pickup Address', to: 'Destination Address', showTo: true,  toRequired: false },
+    '':         { from: 'Pickup Address', to: 'Destination Address', showTo: true,  toRequired: false }
+  };
+
+  const serviceSelect = document.getElementById('service');
+  const fromAddressLabel = document.getElementById('fromAddressLabel');
+  const toAddressLabel = document.getElementById('toAddressLabel');
+  const toAddressRow = document.getElementById('toAddressRow');
+  const toAddressInput = document.getElementById('toAddress');
+
+  function syncAddressFields() {
+    const config = ADDRESS_CONFIG[serviceSelect.value] || ADDRESS_CONFIG[''];
+
+    fromAddressLabel.textContent = config.from;
+    toAddressRow.hidden = !config.showTo;
+
+    if (config.showTo) {
+      toAddressLabel.textContent = config.toRequired ? config.to : config.to + ' (optional)';
+      // Keep required in sync with visibility — a hidden required input blocks
+      // submission with a validation message the user can't see or act on.
+      toAddressInput.required = config.toRequired;
+    } else {
+      toAddressInput.required = false;
+      toAddressInput.value = '';
+    }
+  }
+
+  serviceSelect.addEventListener('change', syncAddressFields);
+  syncAddressFields();
+
   document.getElementById('quoteForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -1100,6 +1144,8 @@
       phone: form.phone.value,
       email: form.email.value,
       service: form.service.value,
+      from_address: form.fromAddress.value,
+      to_address: form.toAddress.value,
       date: form.date.value,
       details: form.details.value,
       submitted_at: new Date().toISOString(),
@@ -1125,6 +1171,7 @@
         if (!response.ok) throw new Error('Network response was not ok');
         submitBtn.textContent = 'Sent! We\'ll be in touch soon.';
         form.reset();
+        syncAddressFields(); // reset() clears the service select, so re-apply its field rules
         setTimeout(function() {
           submitBtn.disabled = false;
           submitBtn.textContent = originalBtnText;

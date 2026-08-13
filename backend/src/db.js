@@ -17,6 +17,8 @@ const ready = initSqlJs().then((SQL) => {
       phone         TEXT NOT NULL,
       email         TEXT NOT NULL,
       service       TEXT NOT NULL CHECK (service IN ('moving', 'junk', 'equipment', 'not-sure')),
+      from_address  TEXT,
+      to_address    TEXT,
       preferred_date TEXT,
       details       TEXT,
       source        TEXT,
@@ -38,8 +40,22 @@ const ready = initSqlJs().then((SQL) => {
     CREATE INDEX IF NOT EXISTS idx_quote_notes_quote_id ON quote_notes(quote_id);
   `);
 
+  // Databases created before addresses existed won't pick up the new columns from
+  // CREATE TABLE IF NOT EXISTS, so add them in place. Both stay nullable: rows
+  // predating this change have no address, and junk removal never has a
+  // destination. Required-ness is enforced per-service in the API layer instead.
+  addColumnIfMissing('quotes', 'from_address', 'TEXT');
+  addColumnIfMissing('quotes', 'to_address', 'TEXT');
+
   persist();
 });
+
+function addColumnIfMissing(table, column, definition) {
+  const existing = all(`PRAGMA table_info(${table})`);
+  if (!existing.some((col) => col.name === column)) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+  }
+}
 
 function persist() {
   fs.writeFileSync(DB_PATH, Buffer.from(db.export()));

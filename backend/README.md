@@ -11,8 +11,13 @@ went out to email/automation but were never stored anywhere queryable. There was
 no way to see how many requests came in, filter by service type, or track a lead
 from "just submitted" through "booked." This backend adds that layer:
 
-- Every quote request is persisted (name, phone, email, service type, preferred
-  date, details, source, timestamps).
+- Every quote request is persisted (name, phone, email, service type, pickup and
+  destination addresses, preferred date, details, source, timestamps).
+- Address requirements follow the service: a pickup address is always required,
+  a destination is required for moving and heavy equipment, and junk removal —
+  being pickup-only — stores no destination at all. The form hides the
+  destination field for junk removal and the API enforces the same rule, so a
+  crafted request can't store a destination the form never offered.
 - A lightweight status workflow (`new → contacted → quoted → booked → closed`)
   with a notes/activity log per lead.
 - A simple admin dashboard (`/admin`) to view and update leads without touching
@@ -40,7 +45,8 @@ from "just submitted" through "booked." This backend adds that layer:
 
 ```
 quotes
-  id, name, phone, email, service, preferred_date, details, source,
+  id, name, phone, email, service, from_address, to_address,
+  preferred_date, details, source,
   status (new|contacted|quoted|booked|closed), created_at, updated_at
 
 quote_notes
