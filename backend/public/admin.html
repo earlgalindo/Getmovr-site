@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movr — Leads Admin</title>
+<style>
+  :root {
+    --cream: #FAF6EE; --forest: #1E3A34; --forest-soft: #3A5751;
+    --lime: #CFF800; --gold: #E8A93B; --line: #E7E0D0;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; background: var(--cream); color: var(--forest); margin: 0; padding: 32px; }
+  h1 { font-size: 1.6rem; margin: 0 0 20px; }
+  .bar { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+  input, select { padding: 8px 12px; border: 2px solid var(--forest); border-radius: 8px; font-size: 0.95rem; }
+  button { padding: 8px 16px; border: 2px solid var(--forest); border-radius: 8px; background: var(--lime); font-weight: 700; cursor: pointer; }
+  button:hover { background: #e2ff5c; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 2px var(--line); }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 0.92rem; vertical-align: top; }
+  th { background: var(--forest); color: var(--cream); }
+  tr:last-child td { border-bottom: none; }
+  .status { padding: 4px 10px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; display: inline-block; }
+  .status-new { background: #FBEAD0; color: #8A5A0F; }
+  .status-contacted { background: #DCEBFF; color: #1E4E8A; }
+  .status-quoted { background: #E6DCFF; color: #4E1E8A; }
+  .status-booked { background: #D6F7DC; color: #1E6B2E; }
+  .status-closed { background: #eee; color: #666; }
+  .muted { color: var(--forest-soft); font-size: 0.85rem; }
+  #msg { margin-bottom: 12px; font-weight: 700; }
+</style>
+</head>
+<body>
+  <h1>Movr — Lead Dashboard</h1>
+  <div class="bar">
+    <input type="password" id="apiKey" placeholder="Admin API key">
+    <select id="statusFilter">
+      <option value="">All statuses</option>
+      <option value="new">New</option>
+      <option value="contacted">Contacted</option>
+      <option value="quoted">Quoted</option>
+      <option value="booked">Booked</option>
+      <option value="closed">Closed</option>
+    </select>
+    <button id="load">Load leads</button>
+    <span class="muted" id="count"></span>
+  </div>
+  <div id="msg"></div>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Name</th><th>Contact</th><th>Service</th><th>Date</th><th>Details</th><th>Status</th><th>Received</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+<script>
+  const apiKeyInput = document.getElementById('apiKey');
+  const statusFilter = document.getElementById('statusFilter');
+  const rowsEl = document.getElementById('rows');
+  const msgEl = document.getElementById('msg');
+  const countEl = document.getElementById('count');
+
+  const saved = sessionStorage.getItem('movr_admin_key');
+  if (saved) apiKeyInput.value = saved;
+
+  function statusBadge(status) {
+    return `<span class="status status-${status}">${status}</span>`;
+  }
+
+  async function updateStatus(id, status) {
+    const res = await fetch(`/api/quotes/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKeyInput.value },
+      body: JSON.stringify({ status })
+    });
+    if (!res.ok) {
+      alert('Failed to update status');
+      return;
+    }
+    load();
+  }
+
+  async function load() {
+    const key = apiKeyInput.value.trim();
+    sessionStorage.setItem('movr_admin_key', key);
+    msgEl.textContent = 'Loading...';
+    rowsEl.innerHTML = '';
+
+    const params = new URLSearchParams();
+    if (statusFilter.value) params.set('status', statusFilter.value);
+
+    try {
+      const res = await fetch(`/api/quotes?${params}`, { headers: { 'x-api-key': key } });
+      if (res.status === 401) {
+        msgEl.textContent = 'Unauthorized — check your API key.';
+        return;
+      }
+      const data = await res.json();
+      msgEl.textContent = '';
+      countEl.textContent = `${data.total} total lead(s)`;
+
+      rowsEl.innerHTML = data.results.map(q => `
+        <tr>
+          <td>${q.id}</td>
+          <td>${q.name}</td>
+          <td>${q.phone}<br><span class="muted">${q.email}</span></td>
+          <td>${q.service}</td>
+          <td>${q.preferred_date || '<span class="muted">—</span>'}</td>
+          <td>${(q.details || '').slice(0, 80)}</td>
+          <td>
+            ${statusBadge(q.status)}
+            <select onchange="updateStatus(${q.id}, this.value)">
+              ${['new','contacted','quoted','booked','closed'].map(s =>
+                `<option value="${s}" ${s === q.status ? 'selected' : ''}>${s}</option>`).join('')}
+            </select>
+          </td>
+          <td class="muted">${new Date(q.created_at).toLocaleString()}</td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      msgEl.textContent = 'Failed to load leads.';
+    }
+  }
+
+  document.getElementById('load').addEventListener('click', load);
+  window.updateStatus = updateStatus;
+  if (saved) load();
+</script>
+</body>
+</html>

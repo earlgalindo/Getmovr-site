@@ -1,0 +1,19 @@
+{
+  "name": "getmovr-backend",
+  "version": "1.0.0",
+  "description": "Lead capture and booking-status API for the Movr quote form, backed by SQLite.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "express": "^4.21.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

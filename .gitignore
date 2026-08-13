@@ -1,0 +1,9 @@
+node_modules/
+backend/node_modules/
+backend/data.sqlite
+backend/data.sqlite-shm
+backend/data.sqlite-wal
+backend/.env
+backend/test/test.sqlite
+backend/test/test.sqlite-shm
+backend/test/test.sqlite-wal

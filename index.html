@@ -768,6 +768,11 @@
 
 <script>
   const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/rho044dow3m3la38kqeiuw25wuf23zja';
+  // Optional: point this at a deployed instance of /backend to also store leads
+  // in the owned SQLite database (powers /admin). Safe to leave as-is — if the
+  // endpoint isn't reachable, this call fails silently and the Make webhook
+  // above still handles the actual form submission.
+  const BACKEND_API_URL = '/api/quotes';
 
   document.getElementById('quoteForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -789,6 +794,13 @@
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
+
+    // Best-effort mirror into the owned lead database; never blocks or affects the UI.
+    fetch(BACKEND_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(function() { /* backend not deployed here — ignore */ });
 
     fetch(MAKE_WEBHOOK_URL, {
       method: 'POST',
