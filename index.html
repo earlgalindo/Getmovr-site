@@ -153,13 +153,36 @@
 
   /* ===== HERO ===== */
   .hero {
-    padding: 76px 32px 90px;
+    padding: 64px 32px 84px;
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 60px;
-    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  /* Desktop: copy top-left, form spanning the right column, supporting details below the copy */
+  .hero-copy { grid-column: 1; grid-row: 1; padding-top: 12px; }
+  .hero-support { grid-column: 1; grid-row: 2; }
+  .hero .quote-form { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
+
+  .hero-points {
+    display: grid;
+    gap: 12px;
+  }
+  .hero-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    color: var(--navy-soft);
+    font-size: 1.02rem;
+    font-weight: 500;
+  }
+  .hero-points li::before {
+    content: "✓";
+    color: var(--teal);
+    font-weight: 800;
+    flex-shrink: 0;
   }
 
   .hero-eyebrow {
@@ -222,44 +245,18 @@
   }
   .btn-outline:hover { border-color: var(--navy); }
 
-  .hero-photo-card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 34px;
-    box-shadow: 0 20px 50px rgba(16, 25, 46, 0.08);
-  }
-  .hero-photo-card .label {
-    font-weight: 700;
-    color: var(--slate);
-    font-size: 0.92rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 18px;
-  }
-  .hero-stat {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .hero-stat:last-child { border-bottom: none; }
-  .hero-stat .num {
-    font-family: 'Plus Jakarta Sans';
-    font-weight: 800;
-    font-size: 1.7rem;
-    color: var(--navy);
-  }
-  .hero-stat .txt {
-    font-weight: 600;
-    color: var(--slate);
-    font-size: 0.98rem;
-    text-align: right;
-  }
-
+  /* Mobile: single column in DOM order — headline, then the form, then supporting details,
+     so the quote form stays near the top of the page instead of below a wall of copy. */
   @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; padding-top: 40px; }
+    .hero { grid-template-columns: 1fr; padding-top: 26px; gap: 24px; }
+    .hero-copy, .hero-support, .hero .quote-form {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    .hero-copy { padding-top: 0; }
+    .hero h1 { font-size: 2.05rem; }
+    .hero-eyebrow { margin-bottom: 16px; font-size: 0.86rem; padding: 6px 14px; }
+    .hero-sub { margin-top: 16px; font-size: 1.05rem; }
   }
 
   /* ===== SECTION SHARED ===== */
@@ -551,37 +548,43 @@
     .trust-inner { grid-template-columns: repeat(2, 1fr); }
   }
 
-  /* ===== QUOTE / CONTACT ===== */
-  .quote {
-    padding: 100px 32px;
-    max-width: 1200px;
-    margin: 0 auto;
+  /* ===== FINAL CTA ===== */
+  .final-cta {
+    background: var(--navy);
+    color: #fff;
+    padding: 84px 32px;
+    text-align: center;
   }
-  .quote-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 56px;
-    align-items: start;
+  .final-cta-inner { max-width: 680px; margin: 0 auto; }
+  .final-cta h2 { color: #fff; font-size: clamp(1.8rem, 3.6vw, 2.4rem); }
+  .final-cta p { color: #AEB8CC; margin-top: 14px; font-size: 1.08rem; }
+  .final-cta-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-  .quote-copy .eyebrow {
-    color: var(--amber);
-    background: var(--amber-soft);
-    display: inline-block;
-    padding: 7px 18px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 0.88rem;
-    margin-bottom: 16px;
+  .btn-amber {
+    background: var(--amber);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(185, 118, 46, 0.28);
   }
-  .quote-copy h2 { font-size: clamp(1.8rem, 3.6vw, 2.5rem); }
-  .quote-copy p {
-    margin-top: 16px;
-    font-size: 1.1rem;
-    color: var(--slate);
-    max-width: 440px;
-    line-height: 1.6;
+  .btn-amber:hover { background: #A3651F; transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.28);
   }
+  .btn-ghost:hover { border-color: #fff; }
+  .final-cta-email {
+    margin-top: 24px;
+    color: #AEB8CC;
+    font-size: 1rem;
+  }
+  .final-cta-email a { color: #E8C79A; font-weight: 600; }
 
+  /* ===== CONTACT BLOCKS ===== */
   .call-box {
     margin-top: 30px;
     background: var(--navy);
@@ -612,14 +615,6 @@
     font-weight: 700;
     font-size: 1.4rem;
   }
-  .email-line {
-    margin-top: 16px;
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--slate);
-  }
-  .email-line a:hover { color: var(--navy); }
-
   .quote-form {
     background: var(--card);
     border: 1px solid var(--line);
@@ -630,7 +625,12 @@
   .quote-form .form-title {
     font-family: 'Plus Jakarta Sans';
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: 1.3rem;
+    margin-bottom: 6px;
+  }
+  .quote-form .form-intro {
+    color: var(--slate);
+    font-size: 0.96rem;
     margin-bottom: 22px;
   }
   .form-row { margin-bottom: 18px; }
@@ -683,7 +683,9 @@
   }
 
   @media (max-width: 900px) {
-    .quote-inner { grid-template-columns: 1fr; }
+    .quote-form { padding: 28px 22px; }
+  }
+  @media (max-width: 480px) {
     .form-two { grid-template-columns: 1fr; }
   }
 
@@ -745,33 +747,71 @@
     <a href="#pricing">Pricing</a>
     <a href="#areas">Service Area</a>
     <a href="#faq">FAQ</a>
-    <a href="tel:+14379887234" class="nav-cta">Call Now</a>
+    <a href="#quote" class="nav-cta">Get A Free Quote</a>
   </div>
 </nav>
 
-<section class="hero">
-  <div>
+<section class="hero" id="quote">
+  <div class="hero-copy">
     <div class="hero-eyebrow">🚚 Toronto &amp; Mississauga · Licensed &amp; Insured</div>
-    <h1>Whatever it is, <span class="accent">we move it</span> — professionally.</h1>
-    <p class="hero-sub">Moving, junk removal, and heavy equipment transport across the GTA. Transparent flat-rate pricing, a professional crew, and clear communication from the first call to the last box.</p>
-    <div class="hero-actions">
-      <a href="#quote" class="btn btn-primary">Get A Free Quote</a>
-      <a href="tel:+14379887234" class="btn btn-outline">📞 (437) 988-7234</a>
-    </div>
+    <h1>Get a <span class="accent">free quote</span> in under 2 hours.</h1>
+    <p class="hero-sub">Moving, junk removal, and heavy equipment transport across the GTA. Flat-rate pricing confirmed before we show up — no hourly clock, no surprise fees.</p>
   </div>
-  <div class="hero-photo-card">
-    <div class="label">Why Clients Choose Us</div>
-    <div class="hero-stat">
-      <span class="num">100%</span>
-      <span class="txt">Licensed &amp;<br>Fully Insured</span>
-    </div>
-    <div class="hero-stat">
-      <span class="num">&lt;2 HRS</span>
-      <span class="txt">Average Response<br>Time</span>
-    </div>
-    <div class="hero-stat">
-      <span class="num">Flat-Rate</span>
-      <span class="txt">Pricing —<br>No Hourly Surprises</span>
+
+  <div class="quote-form">
+    <div class="form-title">Request your free quote</div>
+    <p class="form-intro">Takes about a minute. We'll reply within 2 hours during business hours.</p>
+    <form id="quoteForm" action="#" method="POST">
+      <div class="form-two">
+        <div class="form-row">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-row">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-row">
+        <label for="service">What Do You Need?</label>
+        <select id="service" name="service" required>
+          <option value="">Choose one</option>
+          <option value="moving">Moving</option>
+          <option value="junk">Junk Removal</option>
+          <option value="equipment">Heavy Equipment Transport</option>
+          <option value="not-sure">Not Sure — Just Want To Talk</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="date">Preferred Date (optional)</label>
+        <input type="date" id="date" name="date">
+      </div>
+      <div class="form-row">
+        <label for="details">Tell Us A Bit More</label>
+        <textarea id="details" name="details" placeholder="What are we moving or hauling? Your general area helps too."></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Get My Free Quote</button>
+      <div class="form-note">Free &amp; no obligation — we usually reply within 2 hours.</div>
+    </form>
+  </div>
+
+  <div class="hero-support">
+    <ul class="hero-points">
+      <li>Free, no-obligation quote on every job</li>
+      <li>Flat-rate pricing by volume &amp; distance</li>
+      <li>Licensed &amp; fully insured crew</li>
+    </ul>
+
+    <div class="call-box">
+      <div class="icon">📞</div>
+      <div class="txt-wrap">
+        <div class="label-sm">Prefer to talk? Call us anytime</div>
+        <a href="tel:+14379887234">(437) 988-7234</a>
+      </div>
     </div>
   </div>
 </section>
@@ -997,60 +1037,15 @@
   </details>
 </section>
 
-<section class="quote" id="quote">
-  <div class="quote-inner">
-    <div class="quote-copy">
-      <div class="eyebrow">Get In Touch</div>
-      <h2>Request your free quote.</h2>
-      <p>Call us for the fastest response, or send the details below and we'll get back to you within a couple of hours during business hours.</p>
-      <div class="call-box">
-        <div class="icon">📞</div>
-        <div class="txt-wrap">
-          <div class="label-sm">Call us anytime</div>
-          <a href="tel:+14379887234">(437) 988-7234</a>
-        </div>
-      </div>
-      <div class="email-line">✉️ <a href="mailto:hello@getmovr.ca">hello@getmovr.ca</a></div>
+<section class="final-cta">
+  <div class="final-cta-inner">
+    <h2>Ready to get moving?</h2>
+    <p>Get a free, no-obligation quote — or call and talk it through with us directly.</p>
+    <div class="final-cta-actions">
+      <a href="#quote" class="btn btn-amber">Get My Free Quote</a>
+      <a href="tel:+14379887234" class="btn btn-ghost">📞 (437) 988-7234</a>
     </div>
-    <div class="quote-form">
-      <div class="form-title">Request a quote</div>
-      <form id="quoteForm" action="#" method="POST">
-        <div class="form-two">
-          <div class="form-row">
-            <label for="name">Your Name</label>
-            <input type="text" id="name" name="name" required>
-          </div>
-          <div class="form-row">
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-row">
-          <label for="service">What Do You Need?</label>
-          <select id="service" name="service" required>
-            <option value="">Choose one</option>
-            <option value="moving">Moving</option>
-            <option value="junk">Junk Removal</option>
-            <option value="equipment">Heavy Equipment Transport</option>
-            <option value="not-sure">Not Sure — Just Want To Talk</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label for="date">Preferred Date (optional)</label>
-          <input type="date" id="date" name="date">
-        </div>
-        <div class="form-row">
-          <label for="details">Tell Us A Bit More</label>
-          <textarea id="details" name="details" placeholder="What are we moving or hauling? Your general area helps too."></textarea>
-        </div>
-        <button type="submit" class="btn-submit">Request My Quote</button>
-        <div class="form-note">We usually reply within 2 hours during business hours.</div>
-      </form>
-    </div>
+    <div class="final-cta-email">✉️ <a href="mailto:hello@getmovr.ca">hello@getmovr.ca</a></div>
   </div>
 </section>
 
@@ -1063,6 +1058,7 @@
     <div class="footer-col">
       <h4>Company</h4>
       <ul>
+        <li><a href="#quote">Get A Free Quote</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#areas">Service Area</a></li>
