@@ -91,6 +91,28 @@
   a { color: inherit; text-decoration: none; }
   ul { list-style: none; }
 
+  /* Stroke-based icons inherit colour and size from their container */
+  .ico {
+    width: 1.25em;
+    height: 1.25em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+  .ico-sm { width: 1em; height: 1em; vertical-align: -0.14em; }
+
+  /* ===== ILLUSTRATED SCENE ===== */
+  .scene {
+    background: linear-gradient(180deg, var(--paper) 0%, #EDEBE3 100%);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .scene svg { display: block; width: 100%; height: auto; }
+
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
@@ -738,7 +760,52 @@
 </head>
 <body>
 
-<div class="topbar">📞 Prefer to talk? Call us anytime at <a href="tel:+14379887234">(437) 988-7234</a></div>
+<!-- Icon sprite. Inline so icons always render identically — emoji vary by OS/browser
+     and read as informal, which is the wrong tone for a service business. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-phone" viewBox="0 0 24 24">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24">
+    <path d="M1 3h13v13H1z"/><path d="M14 8h4.5l3.5 3.5V16h-8V8z"/>
+    <circle cx="6" cy="19" r="2"/><circle cx="17.5" cy="19" r="2"/>
+  </symbol>
+  <symbol id="i-box" viewBox="0 0 24 24">
+    <path d="M21 8v8a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8a2 2 0 0 1 1-1.73l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8z"/>
+    <path d="M3.27 6.96 12 12.01l8.73-5.05"/><path d="M12 22.08V12"/>
+  </symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24">
+    <path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+    <path d="M10 11v6M14 11v6"/>
+  </symbol>
+  <symbol id="i-forklift" viewBox="0 0 24 24">
+    <circle cx="5" cy="18" r="2"/><circle cx="12" cy="18" r="2"/>
+    <path d="M2 16v-5h9v5"/><path d="M14 16V5"/><path d="M14 13h6"/>
+    <rect x="15" y="8" width="5" height="5"/>
+  </symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>
+  </symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+  </symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+  </symbol>
+  <symbol id="i-file" viewBox="0 0 24 24">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <path d="M14 2v6h6"/><path d="M16 13H8M16 17H8"/>
+  </symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24">
+    <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>
+  </symbol>
+</svg>
+
+<div class="topbar"><svg class="ico ico-sm"><use href="#i-phone"/></svg> Prefer to talk? Call us anytime at <a href="tel:+14379887234">(437) 988-7234</a></div>
 
 <nav>
   <div class="nav-logo">GET<span>MOVR</span></div>
@@ -753,7 +820,7 @@
 
 <section class="hero" id="quote">
   <div class="hero-copy">
-    <div class="hero-eyebrow">🚚 Toronto &amp; Mississauga · Licensed &amp; Insured</div>
+    <div class="hero-eyebrow"><svg class="ico ico-sm"><use href="#i-truck"/></svg> Toronto &amp; Mississauga · Licensed &amp; Insured</div>
     <h1>Get a <span class="accent">free quote</span> in under 2 hours.</h1>
     <p class="hero-sub">Moving, junk removal, and heavy equipment transport across the GTA. Flat-rate pricing confirmed before we show up — no hourly clock, no surprise fees.</p>
   </div>
@@ -815,13 +882,75 @@
     </ul>
 
     <div class="call-box">
-      <div class="icon">📞</div>
+      <div class="icon"><svg class="ico"><use href="#i-phone"/></svg></div>
       <div class="txt-wrap">
         <div class="label-sm">Prefer to talk? Call us anytime</div>
         <a href="tel:+14379887234">(437) 988-7234</a>
       </div>
     </div>
   </div>
+</section>
+
+<section class="scene" aria-hidden="true">
+  <svg viewBox="0 0 1200 250" role="presentation">
+    <!-- City skyline, kept faint so it reads as background texture -->
+    <g fill="#10192E" opacity="0.08">
+      <rect x="40"  y="96"  width="54" height="116"/>
+      <rect x="104" y="132" width="42" height="80"/>
+      <rect x="156" y="70"  width="60" height="142"/>
+      <rect x="226" y="116" width="46" height="96"/>
+      <rect x="282" y="150" width="38" height="62"/>
+      <rect x="960" y="110" width="50" height="102"/>
+      <rect x="1020" y="76" width="58" height="136"/>
+      <rect x="1088" y="128" width="44" height="84"/>
+      <rect x="1142" y="98"  width="38" height="114"/>
+    </g>
+    <!-- Windows on the taller buildings -->
+    <g fill="#10192E" opacity="0.10">
+      <rect x="168" y="86"  width="10" height="12"/><rect x="188" y="86"  width="10" height="12"/>
+      <rect x="168" y="110" width="10" height="12"/><rect x="188" y="110" width="10" height="12"/>
+      <rect x="168" y="134" width="10" height="12"/><rect x="188" y="134" width="10" height="12"/>
+      <rect x="1032" y="92"  width="10" height="12"/><rect x="1052" y="92"  width="10" height="12"/>
+      <rect x="1032" y="116" width="10" height="12"/><rect x="1052" y="116" width="10" height="12"/>
+    </g>
+
+    <!-- Stacked boxes waiting to be loaded -->
+    <g>
+      <rect x="330" y="164" width="52" height="48" rx="3" fill="#E2C79B"/>
+      <path d="M330 180h52" stroke="#B9762E" stroke-width="3" opacity="0.55"/>
+      <rect x="388" y="150" width="46" height="62" rx="3" fill="#EAD6B4"/>
+      <path d="M388 166h46" stroke="#B9762E" stroke-width="3" opacity="0.45"/>
+      <rect x="352" y="126" width="44" height="38" rx="3" fill="#EAD6B4"/>
+      <path d="M352 140h44" stroke="#B9762E" stroke-width="3" opacity="0.45"/>
+    </g>
+
+    <!-- Moving truck -->
+    <g>
+      <rect x="590" y="106" width="252" height="106" rx="8" fill="#10192E"/>
+      <rect x="590" y="186" width="252" height="12" fill="#B9762E"/>
+      <text x="716" y="160" text-anchor="middle" fill="#F6F5F1"
+            font-family="Plus Jakarta Sans, sans-serif" font-size="34" font-weight="800"
+            letter-spacing="1">MOVR</text>
+      <path d="M842 212v-64h54l34 36v28z" fill="#2B3652"/>
+      <rect x="854" y="156" width="42" height="26" rx="4" fill="#CFE0F0" opacity="0.85"/>
+      <rect x="922" y="182" width="10" height="12" rx="2" fill="#E8C79A"/>
+    </g>
+    <!-- Wheels -->
+    <g fill="#10192E">
+      <circle cx="656" cy="212" r="21"/><circle cx="784" cy="212" r="21"/><circle cx="902" cy="212" r="21"/>
+    </g>
+    <g fill="#F6F5F1">
+      <circle cx="656" cy="212" r="8"/><circle cx="784" cy="212" r="8"/><circle cx="902" cy="212" r="8"/>
+    </g>
+
+    <!-- Road -->
+    <path d="M0 233h1200" stroke="#10192E" stroke-width="2.5" opacity="0.35"/>
+    <g stroke="#10192E" stroke-width="3" opacity="0.16" stroke-linecap="round">
+      <path d="M60 244h60"/><path d="M170 244h60"/><path d="M280 244h60"/><path d="M390 244h60"/>
+      <path d="M500 244h60"/><path d="M610 244h60"/><path d="M720 244h60"/><path d="M830 244h60"/>
+      <path d="M940 244h60"/><path d="M1050 244h60"/>
+    </g>
+  </svg>
 </section>
 
 <section class="how" id="how">
@@ -858,7 +987,7 @@
   </div>
   <div class="svc-grid">
     <div class="svc-card">
-      <div class="svc-icon">📦</div>
+      <div class="svc-icon"><svg class="ico"><use href="#i-box"/></svg></div>
       <h3>Moving</h3>
       <p>Apartments, houses, and offices — packed and moved carefully, on schedule.</p>
       <ul>
@@ -869,7 +998,7 @@
       <div class="svc-note">Flat-rate quotes based on volume &amp; distance</div>
     </div>
     <div class="svc-card">
-      <div class="svc-icon">🧹</div>
+      <div class="svc-icon"><svg class="ico"><use href="#i-trash"/></svg></div>
       <h3>Junk Removal</h3>
       <p>Same-day availability in most cases. We recycle or donate what we can.</p>
       <ul>
@@ -880,7 +1009,7 @@
       <div class="svc-note">Priced by volume, not weight</div>
     </div>
     <div class="svc-card">
-      <div class="svc-icon">🏗️</div>
+      <div class="svc-icon"><svg class="ico"><use href="#i-forklift"/></svg></div>
       <h3>Heavy Equipment</h3>
       <p>Machinery, appliances, and oversized items moved safely with the right equipment.</p>
       <ul>
@@ -901,28 +1030,28 @@
     </div>
     <div class="why-grid">
       <div class="why-item">
-        <div class="icon">🛡️</div>
+        <div class="icon"><svg class="ico"><use href="#i-shield"/></svg></div>
         <div>
           <h3>Licensed &amp; fully insured</h3>
           <p>Every job is covered by liability insurance, so you're protected from the first item loaded to the last.</p>
         </div>
       </div>
       <div class="why-item">
-        <div class="icon">💬</div>
+        <div class="icon"><svg class="ico"><use href="#i-chat"/></svg></div>
         <div>
           <h3>Transparent, flat-rate pricing</h3>
           <p>You get a clear price upfront based on volume and distance — not a meter running while your crew works.</p>
         </div>
       </div>
       <div class="why-item">
-        <div class="icon">⏱️</div>
+        <div class="icon"><svg class="ico"><use href="#i-clock"/></svg></div>
         <div>
           <h3>Fast, reliable response</h3>
           <p>Most quote requests get a reply within two hours during business hours — no chasing us down for an answer.</p>
         </div>
       </div>
       <div class="why-item">
-        <div class="icon">📍</div>
+        <div class="icon"><svg class="ico"><use href="#i-pin"/></svg></div>
         <div>
           <h3>Local GTA knowledge</h3>
           <p>We know Toronto and Mississauga's buildings, elevator booking rules, and parking restrictions — so move day goes smoothly.</p>
@@ -960,19 +1089,19 @@
 <section class="trust">
   <div class="trust-inner">
     <div class="trust-item">
-      <div class="icon">🛡️</div>
+      <div class="icon"><svg class="ico"><use href="#i-shield"/></svg></div>
       <div class="txt">Licensed &amp; Insured</div>
     </div>
     <div class="trust-item">
-      <div class="icon">📝</div>
+      <div class="icon"><svg class="ico"><use href="#i-file"/></svg></div>
       <div class="txt">Free, No-Obligation Quotes</div>
     </div>
     <div class="trust-item">
-      <div class="icon">💬</div>
+      <div class="icon"><svg class="ico"><use href="#i-chat"/></svg></div>
       <div class="txt">Clear Pricing, No Surprises</div>
     </div>
     <div class="trust-item">
-      <div class="icon">📍</div>
+      <div class="icon"><svg class="ico"><use href="#i-pin"/></svg></div>
       <div class="txt">Local — Toronto &amp; Mississauga</div>
     </div>
   </div>
@@ -1051,9 +1180,9 @@
     <p>Get a free, no-obligation quote — or call and talk it through with us directly.</p>
     <div class="final-cta-actions">
       <a href="#quote" class="btn btn-amber">Get My Free Quote</a>
-      <a href="tel:+14379887234" class="btn btn-ghost">📞 (437) 988-7234</a>
+      <a href="tel:+14379887234" class="btn btn-ghost"><svg class="ico"><use href="#i-phone"/></svg> (437) 988-7234</a>
     </div>
-    <div class="final-cta-email">✉️ <a href="mailto:hello@getmovr.ca">hello@getmovr.ca</a></div>
+    <div class="final-cta-email"><svg class="ico ico-sm"><use href="#i-mail"/></svg> <a href="mailto:hello@getmovr.ca">hello@getmovr.ca</a></div>
   </div>
 </section>
 
