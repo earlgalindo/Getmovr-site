@@ -79,3 +79,15 @@ create → list → update lifecycle.
 Deploys as a normal Node process (Render, Railway, Fly.io, a small VPS, etc.).
 Set `ADMIN_API_KEY` and, if you want the SQLite file to persist across deploys,
 mount `DB_PATH` on a persistent volume.
+
+**Render (one click):** this repo includes `backend/render.yaml`. In the Render
+dashboard, "New +" → "Blueprint" → point it at this GitHub repo. Render reads
+`render.yaml`, provisions a free web service with a persistent 1GB disk for the
+SQLite file, and generates a random `ADMIN_API_KEY` for you automatically (copy
+it from the service's Environment tab afterward — you'll need it to log into
+`/admin`). No Dockerfile or manual server setup required.
+
+Once deployed, update `BACKEND_API_URL` near the top of the quote form's
+`<script>` block in `index.html` (currently `/api/quotes`) to your Render
+service's full URL, e.g. `https://movr-backend.onrender.com/api/quotes`, so the
+live static site (wherever it's hosted) can reach the API.
