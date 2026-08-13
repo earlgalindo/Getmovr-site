@@ -81,11 +81,18 @@ Set `ADMIN_API_KEY` and, if you want the SQLite file to persist across deploys,
 mount `DB_PATH` on a persistent volume.
 
 **Render (one click):** this repo includes `backend/render.yaml`. In the Render
-dashboard, "New +" → "Blueprint" → point it at this GitHub repo. Render reads
-`render.yaml`, provisions a free web service with a persistent 1GB disk for the
-SQLite file, and generates a random `ADMIN_API_KEY` for you automatically (copy
-it from the service's Environment tab afterward — you'll need it to log into
-`/admin`). No Dockerfile or manual server setup required.
+dashboard, "New +" → "Blueprint" → point it at this GitHub repo, with Blueprint
+Path set to `backend/render.yaml`. Render provisions a free web service and
+generates a random `ADMIN_API_KEY` for you automatically (copy it from the
+service's Environment tab afterward — you'll need it to log into `/admin`). No
+Dockerfile or manual server setup required.
+
+Render's free plan doesn't support persistent disks, so the SQLite file lives
+on the service's ephemeral filesystem: it survives normal restarts but is
+wiped on every redeploy. Fine for demoing the project; before using this for
+a real client's live leads, either upgrade to a paid Render plan and mount
+`DB_PATH` on a persistent disk (see the free-tier commit history in this repo
+for the config), or point `DB_PATH` at a managed Postgres/SQLite host instead.
 
 Once deployed, update `BACKEND_API_URL` near the top of the quote form's
 `<script>` block in `index.html` (currently `/api/quotes`) to your Render
