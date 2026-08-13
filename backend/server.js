@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const db = require('./src/db');
 const quotesRouter = require('./src/routes/quotes');
 
 const app = express();
@@ -22,7 +23,10 @@ app.use((err, _req, res, _next) => {
 });
 
 if (require.main === module) {
-  app.listen(PORT, () => console.log(`Movr backend listening on port ${PORT}`));
+  db.ready.then(() => {
+    app.listen(PORT, () => console.log(`Movr backend listening on port ${PORT}`));
+  });
 }
 
 module.exports = app;
+module.exports.ready = db.ready;

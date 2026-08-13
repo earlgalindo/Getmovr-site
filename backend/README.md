@@ -23,14 +23,17 @@ from "just submitted" through "booked." This backend adds that layer:
 ## Stack
 
 - **Node.js + Express** — REST API
-- **SQLite** via Node's built-in `node:sqlite` module (requires Node ≥22.5) —
-  zero-config, file-based, and zero native dependencies to compile, so `npm
-  install` never fails on a host without build tools. Swappable for
-  Postgres/MySQL later without changing the API shape, since all access goes
-  through parameterized `db.prepare()` calls. (An earlier version used
-  `better-sqlite3`; switched after its native build failed on Render's free
-  tier — `node:sqlite` has the same `prepare/run/get/all` API with one fewer
-  moving part.)
+- **SQLite** via `sql.js` (SQLite compiled to WebAssembly) — file-based,
+  parameterized queries throughout (`db.run/get/all`, all `?`-bound), and
+  crucially no native module to compile and no Node-version requirement, so
+  `npm install` works on any host regardless of build toolchain or Node
+  version. Swappable for Postgres/MySQL later without changing the API
+  shape. (Went through two earlier iterations — `better-sqlite3` failed to
+  compile on Render's free-tier build image, and Node's built-in
+  `node:sqlite` needed a newer Node than Render's build step actually used
+  despite pinning attempts — `sql.js` sidesteps both problems entirely.)
+  Since it operates on an in-memory image, every write persists itself back
+  to `DB_PATH` immediately after (see `src/db.js`).
 - **Vanilla JS admin UI** — no framework/build step required.
 
 ## Data model

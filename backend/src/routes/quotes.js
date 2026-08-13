@@ -36,13 +36,13 @@ router.post('/', (req, res) => {
 
   const source = req.body.source ? String(req.body.source).trim() : 'getmovr.ca quote form';
 
-  const stmt = db.prepare(`
-    INSERT INTO quotes (name, phone, email, service, preferred_date, details, source)
-    VALUES (@name, @phone, @email, @service, @preferredDate, @details, @source)
-  `);
-  const info = stmt.run({ ...value, source });
+  const info = db.run(
+    `INSERT INTO quotes (name, phone, email, service, preferred_date, details, source)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [value.name, value.phone, value.email, value.service, value.preferredDate, value.details, source]
+  );
 
-  const created = db.prepare('SELECT * FROM quotes WHERE id = ?').get(info.lastInsertRowid);
+  const created = db.get('SELECT * FROM quotes WHERE id = ?', [info.lastInsertRowid]);
   res.status(201).json(created);
 });
 
@@ -60,13 +60,14 @@ router.get('/', requireAdmin, (req, res) => {
   let rows;
   let total;
   if (status) {
-    rows = db
-      .prepare('SELECT * FROM quotes WHERE status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?')
-      .all(status, lim, off);
-    total = db.prepare('SELECT COUNT(*) AS n FROM quotes WHERE status = ?').get(status).n;
+    rows = db.all(
+      'SELECT * FROM quotes WHERE status = ? ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      [status, lim, off]
+    );
+    total = db.get('SELECT COUNT(*) AS n FROM quotes WHERE status = ?', [status]).n;
   } else {
-    rows = db.prepare('SELECT * FROM quotes ORDER BY created_at DESC LIMIT ? OFFSET ?').all(lim, off);
-    total = db.prepare('SELECT COUNT(*) AS n FROM quotes').get().n;
+    rows = db.all('SELECT * FROM quotes ORDER BY created_at DESC LIMIT ? OFFSET ?', [lim, off]);
+    total = db.get('SELECT COUNT(*) AS n FROM quotes', []).n;
   }
 
   res.json({ total, limit: lim, offset: off, results: rows });
@@ -74,19 +75,17 @@ router.get('/', requireAdmin, (req, res) => {
 
 // GET /api/quotes/:id — admin: single quote + its notes
 router.get('/:id', requireAdmin, (req, res) => {
-  const quote = db.prepare('SELECT * FROM quotes WHERE id = ?').get(req.params.id);
+  const quote = db.get('SELECT * FROM quotes WHERE id = ?', [req.params.id]);
   if (!quote) return res.status(404).json({ error: 'Not found' });
 
-  const notes = db
-    .prepare('SELECT * FROM quote_notes WHERE quote_id = ? ORDER BY created_at ASC')
-    .all(req.params.id);
+  const notes = db.all('SELECT * FROM quote_notes WHERE quote_id = ? ORDER BY created_at ASC', [req.params.id]);
 
   res.json({ ...quote, notes });
 });
 
 // PATCH /api/quotes/:id — admin: update status
 router.patch('/:id', requireAdmin, (req, res) => {
-  const quote = db.prepare('SELECT * FROM quotes WHERE id = ?').get(req.params.id);
+  const quote = db.get('SELECT * FROM quotes WHERE id = ?', [req.params.id]);
   if (!quote) return res.status(404).json({ error: 'Not found' });
 
   const { status } = req.body || {};
@@ -94,28 +93,25 @@ router.patch('/:id', requireAdmin, (req, res) => {
     return res.status(400).json({ error: `status must be one of: ${VALID_STATUSES.join(', ')}` });
   }
 
-  db.prepare(`
-    UPDATE quotes
-    SET status = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
-    WHERE id = ?
-  `).run(status, req.params.id);
+  db.run(
+    `UPDATE quotes SET status = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?`,
+    [status, req.params.id]
+  );
 
-  res.json(db.prepare('SELECT * FROM quotes WHERE id = ?').get(req.params.id));
+  res.json(db.get('SELECT * FROM quotes WHERE id = ?', [req.params.id]));
 });
 
 // POST /api/quotes/:id/notes — admin: append a note
 router.post('/:id/notes', requireAdmin, (req, res) => {
-  const quote = db.prepare('SELECT * FROM quotes WHERE id = ?').get(req.params.id);
+  const quote = db.get('SELECT * FROM quotes WHERE id = ?', [req.params.id]);
   if (!quote) return res.status(404).json({ error: 'Not found' });
 
   const note = String((req.body || {}).note || '').trim();
   if (!note) return res.status(400).json({ error: 'note is required' });
 
-  const info = db
-    .prepare('INSERT INTO quote_notes (quote_id, note) VALUES (?, ?)')
-    .run(req.params.id, note);
+  const info = db.run('INSERT INTO quote_notes (quote_id, note) VALUES (?, ?)', [req.params.id, note]);
 
-  res.status(201).json(db.prepare('SELECT * FROM quote_notes WHERE id = ?').get(info.lastInsertRowid));
+  res.status(201).json(db.get('SELECT * FROM quote_notes WHERE id = ?', [info.lastInsertRowid]));
 });
 
 module.exports = router;

@@ -15,6 +15,7 @@ let server;
 let baseUrl;
 
 test.before(async () => {
+  await app.ready;
   await new Promise((resolve) => {
     server = app.listen(0, () => {
       baseUrl = `http://127.0.0.1:${server.address().port}`;
