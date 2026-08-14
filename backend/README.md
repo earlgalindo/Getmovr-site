@@ -88,6 +88,31 @@ Runs an integration test suite (Node's built-in test runner) against a
 throwaway SQLite file — covers input validation, auth enforcement, and the
 create → list → update lifecycle.
 
+## Where each piece runs
+
+The site and the API are hosted separately:
+
+| Piece | Host | Why |
+|---|---|---|
+| Marketing site (`index.html`, service pages, `/assets`) | Vercel — `getmovr.ca` | Static CDN, no cold start, good Core Web Vitals |
+| API + admin dashboard (`/backend`) | Render | Needs a persistent process and a writable filesystem for SQLite |
+
+That split is why two pieces of configuration exist that would otherwise look
+unnecessary:
+
+- **CORS in `server.js`.** The form on `getmovr.ca` posts to the API on another
+  origin. A JSON POST triggers a preflight, so without CORS headers the browser
+  rejects it and leads never reach the database. The allowlist defaults to the
+  getmovr.ca origins and can be overridden with `ALLOWED_ORIGINS`.
+- **An absolute API host in `assets/site.js`.** A relative `/api/quotes` would
+  resolve against `getmovr.ca`, which has no such route. The script uses the
+  absolute host unless the page is being served by the API itself (Render or
+  local dev), where same-origin still works.
+
+Vercel is limited to the static files by `.vercelignore`, which excludes
+`backend/` — both because it cannot run there and to keep server source off the
+public static host.
+
 ## Deployment
 
 Deploys as a normal Node process (Render, Railway, Fly.io, a small VPS, etc.).

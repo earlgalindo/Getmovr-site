@@ -8,6 +8,29 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+// The marketing site is served from a static host (getmovr.ca on Vercel) while
+// this API runs elsewhere, so the quote form posts cross-origin. A JSON POST is
+// not a "simple" request, so the browser sends a preflight first — without these
+// headers it is rejected and leads silently never reach the database.
+// Restricted to known origins rather than "*", so another site can't point its
+// own form at this endpoint.
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ||
+  'https://getmovr.ca,https://www.getmovr.ca')
+  .split(',').map((o) => o.trim()).filter(Boolean);
+
+app.use((req, res, next) => {
+  const origin = req.get('origin');
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.set('Access-Control-Allow-Origin', origin);
+    res.set('Vary', 'Origin');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, x-api-key');
+    res.set('Access-Control-Max-Age', '86400');
+  }
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
+
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.use('/api/quotes', quotesRouter);
 

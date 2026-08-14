@@ -5,11 +5,16 @@ const quoteForm = document.getElementById('quoteForm');
 if (quoteForm) {
 
 const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/rho044dow3m3la38kqeiuw25wuf23zja';
-// Optional: point this at a deployed instance of /backend to also store leads
-// in the owned SQLite database (powers /admin). Safe to leave as-is — if the
-// endpoint isn't reachable, this call fails silently and the Make webhook
-// above still handles the actual form submission.
-const BACKEND_API_URL = '/api/quotes';
+// Where the owned lead database lives (it powers /admin). The static site is
+// hosted separately from the API, so the path has to be absolute when the page
+// is served from the static host — a relative /api/quotes would resolve against
+// getmovr.ca, which has no such route, and every lead would be lost.
+// Same-origin when the API itself is serving the page (Render, or local dev).
+const API_HOST = 'https://movr-backend-v6fx.onrender.com';
+const SELF_HOSTED = location.hostname === 'localhost' ||
+                    location.hostname === '127.0.0.1' ||
+                    location.hostname.endsWith('.onrender.com');
+const BACKEND_API_URL = (SELF_HOSTED ? '' : API_HOST) + '/api/quotes';
 
 // Address fields adapt to the service: junk removal is a pickup only, so it has
 // no destination. Labels change per service so "from/to" reads naturally.

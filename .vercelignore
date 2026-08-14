@@ -1,0 +1,6 @@
+# Vercel hosts the static marketing site only. The Express API and admin
+# dashboard run on Render — they need a persistent process and a writable
+# filesystem for SQLite, neither of which a serverless static deploy provides.
+# Excluding the folder also keeps server source off the public static host.
+backend/
+node_modules/
