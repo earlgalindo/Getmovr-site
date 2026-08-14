@@ -14,11 +14,16 @@
 <meta property="og:description" content="Licensed, insured moving, junk removal, and heavy equipment transport across Toronto and Mississauga. Transparent flat-rate pricing, no hidden fees.">
 <meta property="og:locale" content="en_CA">
 <meta property="og:site_name" content="Movr">
+<meta property="og:image" content="https://getmovr.ca/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Movr — whatever it is, we move it. Moving, junk removal and heavy equipment transport in Toronto and Mississauga.">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Movr — Professional Moving, Junk Removal &amp; Heavy Equipment Transport">
 <meta name="twitter:description" content="Licensed, insured moving, junk removal, and heavy equipment transport across Toronto and Mississauga.">
+<meta name="twitter:image" content="https://getmovr.ca/assets/og-image.png">
 
 <!-- LocalBusiness structured data -->
 <script type="application/ld+json">
@@ -52,711 +57,70 @@
 }
 </script>
 
+<!-- FAQ structured data. Every question and answer below is rendered verbatim in
+     the FAQ section of this page — Google requires marked-up FAQ content to be
+     visible to the user, so these must be kept in sync if the copy changes. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How far in advance should I book my move?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We recommend 1–2 weeks ahead for weekday moves, and 3–4 weeks ahead for weekends during peak season (May–September). We'll always do our best to accommodate shorter notice."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are you licensed and insured?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Every job is covered by liability insurance, and our crew follows standard safe-handling and transport practices."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is pricing determined?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Moving jobs are quoted flat-rate based on volume and distance after a quick call or form submission. Junk removal is priced by the volume your items take up in the truck, not by weight. Heavy equipment jobs are quoted individually based on access and machinery needed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What items can't you take for junk removal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We're unable to take hazardous materials (paint, chemicals, propane tanks) or certain electronics under local disposal rules. Ask us and we'll point you to the right local disposal option."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to be on-site for the whole move?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We ask that someone authorized to make decisions be reachable by phone throughout, but you don't need to be present the entire time if access has been arranged in advance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if something gets damaged?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our crew takes care to protect your belongings during every job. In the rare case something is damaged, it's handled through our insurance — we'll walk you through the process directly."
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --paper: #F6F5F1;
-    --card: #FFFFFF;
-    --navy: #10192E;
-    --navy-soft: #2B3652;
-    --slate: #59677D;
-    --amber: #B9762E;
-    --amber-soft: #F4E8D6;
-    --teal: #1F6F63;
-    --line: #E4E2DA;
-    --line-strong: #D6D3C8;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--paper);
-    color: var(--navy);
-    font-family: 'Inter', sans-serif;
-    font-size: 17px;
-    line-height: 1.65;
-    overflow-x: hidden;
-  }
-
-  h1, h2, h3, .display {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    line-height: 1.2;
-    color: var(--navy);
-    letter-spacing: -0.01em;
-  }
-
-  a { color: inherit; text-decoration: none; }
-  ul { list-style: none; }
-
-  /* Stroke-based icons inherit colour and size from their container */
-  .ico {
-    width: 1.25em;
-    height: 1.25em;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.75;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    flex-shrink: 0;
-  }
-  .ico-sm { width: 1em; height: 1em; vertical-align: -0.14em; }
-
-  /* ===== ILLUSTRATED SCENE ===== */
-  .scene {
-    background: linear-gradient(180deg, var(--paper) 0%, #EDEBE3 100%);
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    overflow: hidden;
-  }
-  .scene svg { display: block; width: 100%; height: auto; }
-
-  @media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition: none !important; }
-  }
-
-  /* ===== TOP BAR ===== */
-  .topbar {
-    background: var(--navy);
-    color: #C9D2E3;
-    text-align: center;
-    padding: 10px 16px;
-    font-size: 0.95rem;
-    font-weight: 500;
-  }
-  .topbar a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
-
-  /* ===== NAV ===== */
-  nav {
-    position: sticky;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 32px;
-    background: rgba(246, 245, 241, 0.92);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--line);
-  }
-  .nav-logo {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--navy);
-    letter-spacing: -0.02em;
-  }
-  .nav-logo span { color: var(--amber); }
-  .nav-links {
-    display: flex;
-    gap: 34px;
-    align-items: center;
-  }
-  .nav-links a {
-    color: var(--slate);
-    font-weight: 600;
-    font-size: 0.98rem;
-  }
-  .nav-links a:hover { color: var(--navy); }
-  .nav-cta {
-    background: var(--navy);
-    color: #fff !important;
-    padding: 11px 24px;
-    border-radius: 8px;
-    font-weight: 700;
-  }
-  .nav-cta:hover { background: var(--navy-soft); }
-
-  @media (max-width: 860px) {
-    .nav-links a:not(.nav-cta) { display: none; }
-  }
-
-  /* ===== HERO ===== */
-  .hero {
-    padding: 64px 32px 84px;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 56px;
-    align-items: start;
-  }
-  /* Desktop: copy top-left, form spanning the right column, supporting details below the copy */
-  .hero-copy { grid-column: 1; grid-row: 1; padding-top: 12px; }
-  .hero-support { grid-column: 1; grid-row: 2; }
-  .hero .quote-form { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
-
-  .hero-points {
-    display: grid;
-    gap: 12px;
-  }
-  .hero-points li {
-    display: flex;
-    align-items: flex-start;
-    gap: 11px;
-    color: var(--navy-soft);
-    font-size: 1.02rem;
-    font-weight: 500;
-  }
-  .hero-points li::before {
-    content: "✓";
-    color: var(--teal);
-    font-weight: 800;
-    flex-shrink: 0;
-  }
-
-  .hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--amber-soft);
-    color: #7A4E19;
-    padding: 7px 16px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 0.92rem;
-    margin-bottom: 22px;
-  }
-
-  .hero h1 {
-    font-size: clamp(2.3rem, 4.6vw, 3.4rem);
-    font-weight: 800;
-  }
-  .hero h1 .accent { color: var(--amber); }
-
-  .hero-sub {
-    margin-top: 22px;
-    font-size: 1.15rem;
-    color: var(--slate);
-    max-width: 520px;
-    line-height: 1.65;
-  }
-
-  .hero-actions {
-    margin-top: 34px;
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 15px 28px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 1.02rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.15s ease, background 0.2s, box-shadow 0.2s;
-  }
-  .btn-primary {
-    background: var(--navy);
-    color: #fff;
-    box-shadow: 0 6px 20px rgba(16, 25, 46, 0.18);
-  }
-  .btn-primary:hover { background: var(--navy-soft); transform: translateY(-1px); }
-  .btn-outline {
-    background: #fff;
-    color: var(--navy);
-    border: 1.5px solid var(--line-strong);
-  }
-  .btn-outline:hover { border-color: var(--navy); }
-
-  /* Mobile: single column in DOM order — headline, then the form, then supporting details,
-     so the quote form stays near the top of the page instead of below a wall of copy. */
-  @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; padding-top: 26px; gap: 24px; }
-    .hero-copy, .hero-support, .hero .quote-form {
-      grid-column: 1;
-      grid-row: auto;
-    }
-    .hero-copy { padding-top: 0; }
-    .hero h1 { font-size: 2.05rem; }
-    .hero-eyebrow { margin-bottom: 16px; font-size: 0.86rem; padding: 6px 14px; }
-    .hero-sub { margin-top: 16px; font-size: 1.05rem; }
-  }
-
-  /* ===== SECTION SHARED ===== */
-  .section-head { text-align: center; margin-bottom: 52px; }
-  .section-head .eyebrow {
-    color: var(--amber);
-    background: var(--amber-soft);
-    display: inline-block;
-    padding: 7px 18px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 0.88rem;
-    margin-bottom: 16px;
-  }
-  .section-head h2 { font-size: clamp(1.8rem, 3.6vw, 2.5rem); }
-  .section-head p { margin-top: 14px; color: var(--slate); font-size: 1.05rem; max-width: 560px; margin-left: auto; margin-right: auto; }
-
-  /* ===== HOW IT WORKS ===== */
-  .how {
-    background: var(--navy);
-    color: #fff;
-    padding: 90px 32px;
-  }
-  .how-inner { max-width: 1200px; margin: 0 auto; }
-  .how .section-head h2 { color: #fff; }
-  .how .section-head .eyebrow { background: rgba(255,255,255,0.1); color: #E8C79A; }
-
-  .how-steps {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-  }
-  .how-step { text-align: center; }
-  .how-step .step-num {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-    border: 1.5px solid rgba(255,255,255,0.2);
-    color: #E8C79A;
-    font-family: 'Plus Jakarta Sans';
-    font-weight: 700;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-  }
-  .how-step h3 {
-    color: #fff;
-    font-size: 1.25rem;
-    margin-bottom: 10px;
-  }
-  .how-step p {
-    color: #AEB8CC;
-    font-size: 1.02rem;
-    line-height: 1.6;
-    max-width: 300px;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 820px) {
-    .how-steps { grid-template-columns: 1fr; gap: 50px; }
-  }
-
-  /* ===== SERVICES ===== */
-  .services {
-    padding: 100px 32px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .svc-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 26px;
-  }
-  .svc-card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 34px 28px;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .svc-card:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(16, 25, 46, 0.08); }
-  .svc-icon {
-    width: 52px; height: 52px;
-    background: var(--amber-soft);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-  .svc-card h3 { font-size: 1.35rem; margin-bottom: 10px; }
-  .svc-card p { color: var(--slate); font-size: 1rem; margin-bottom: 18px; }
-  .svc-card ul { font-size: 0.98rem; }
-  .svc-card ul li {
-    padding: 7px 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    color: var(--slate);
-  }
-  .svc-card ul li::before {
-    content: "✓";
-    color: var(--teal);
-    font-weight: 800;
-    flex-shrink: 0;
-  }
-  .svc-note {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px dashed var(--line);
-    font-size: 0.92rem;
-    color: var(--amber);
-    font-weight: 600;
-  }
-
-  @media (max-width: 900px) {
-    .svc-grid { grid-template-columns: 1fr; }
-  }
-
-  /* ===== WHY US ===== */
-  .why {
-    background: var(--card);
-    padding: 90px 32px;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-  .why-inner { max-width: 1200px; margin: 0 auto; }
-  .why-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 36px 48px;
-  }
-  .why-item { display: flex; gap: 18px; }
-  .why-item .icon {
-    width: 46px; height: 46px;
-    flex-shrink: 0;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-  }
-  .why-item h3 { font-size: 1.12rem; margin-bottom: 6px; }
-  .why-item p { color: var(--slate); font-size: 0.98rem; }
-
-  @media (max-width: 780px) {
-    .why-grid { grid-template-columns: 1fr; }
-  }
-
-  /* ===== PRICING ===== */
-  .pricing {
-    padding: 100px 32px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 26px;
-  }
-  .price-card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 30px 26px;
-  }
-  .price-card h3 { font-size: 1.1rem; margin-bottom: 10px; }
-  .price-card p { color: var(--slate); font-size: 0.98rem; }
-  .price-card .tag {
-    display: inline-block;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 50px;
-    padding: 5px 14px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--teal);
-    margin-bottom: 14px;
-  }
-
-  @media (max-width: 900px) {
-    .pricing-grid { grid-template-columns: 1fr; }
-  }
-
-  /* ===== SERVICE AREA ===== */
-  .area {
-    background: var(--navy);
-    color: #fff;
-    padding: 90px 32px;
-  }
-  .area-inner { max-width: 1200px; margin: 0 auto; }
-  .area .section-head h2 { color: #fff; }
-  .area .section-head p { color: #AEB8CC; }
-  .area .section-head .eyebrow { background: rgba(255,255,255,0.1); color: #E8C79A; }
-  .area-groups {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  .area-group h3 { color: #fff; font-size: 1.05rem; margin-bottom: 14px; }
-  .area-chips { display: flex; flex-wrap: wrap; gap: 10px; }
-  .area-chips span {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.14);
-    color: #D3D9E6;
-    padding: 7px 14px;
-    border-radius: 50px;
-    font-size: 0.9rem;
-  }
-  .area-note {
-    text-align: center;
-    margin-top: 36px;
-    color: #AEB8CC;
-    font-size: 0.98rem;
-  }
-  .area-note a { color: #E8C79A; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
-
-  @media (max-width: 640px) {
-    .area-groups { grid-template-columns: 1fr; }
-  }
-
-  /* ===== FAQ ===== */
-  .faq {
-    padding: 100px 32px;
-    max-width: 820px;
-    margin: 0 auto;
-  }
-  .faq-item {
-    border-bottom: 1px solid var(--line);
-  }
-  .faq-item summary {
-    padding: 22px 4px;
-    font-family: 'Plus Jakarta Sans';
-    font-weight: 700;
-    font-size: 1.05rem;
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-  }
-  .faq-item summary::-webkit-details-marker { display: none; }
-  .faq-item summary::after {
-    content: "+";
-    font-size: 1.4rem;
-    color: var(--amber);
-    font-weight: 500;
-    flex-shrink: 0;
-    transition: transform 0.2s;
-  }
-  .faq-item[open] summary::after { transform: rotate(45deg); }
-  .faq-item p {
-    padding: 0 4px 22px;
-    color: var(--slate);
-    font-size: 0.98rem;
-    max-width: 680px;
-  }
-
-  /* ===== TRUST STRIP ===== */
-  .trust {
-    background: var(--amber-soft);
-    padding: 44px 32px;
-  }
-  .trust-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 26px;
-    text-align: center;
-  }
-  .trust-item .icon { font-size: 1.9rem; margin-bottom: 8px; }
-  .trust-item .txt {
-    font-weight: 700;
-    font-size: 0.98rem;
-    color: var(--navy);
-  }
-  @media (max-width: 780px) {
-    .trust-inner { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  /* ===== FINAL CTA ===== */
-  .final-cta {
-    background: var(--navy);
-    color: #fff;
-    padding: 84px 32px;
-    text-align: center;
-  }
-  .final-cta-inner { max-width: 680px; margin: 0 auto; }
-  .final-cta h2 { color: #fff; font-size: clamp(1.8rem, 3.6vw, 2.4rem); }
-  .final-cta p { color: #AEB8CC; margin-top: 14px; font-size: 1.08rem; }
-  .final-cta-actions {
-    margin-top: 30px;
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .btn-amber {
-    background: var(--amber);
-    color: #fff;
-    box-shadow: 0 6px 20px rgba(185, 118, 46, 0.28);
-  }
-  .btn-amber:hover { background: #A3651F; transform: translateY(-1px); }
-  .btn-ghost {
-    background: transparent;
-    color: #fff;
-    border: 1.5px solid rgba(255,255,255,0.28);
-  }
-  .btn-ghost:hover { border-color: #fff; }
-  .final-cta-email {
-    margin-top: 24px;
-    color: #AEB8CC;
-    font-size: 1rem;
-  }
-  .final-cta-email a { color: #E8C79A; font-weight: 600; }
-
-  /* ===== CONTACT BLOCKS ===== */
-  .call-box {
-    margin-top: 30px;
-    background: var(--navy);
-    border-radius: 14px;
-    padding: 26px 28px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
-  .call-box .icon {
-    width: 48px; height: 48px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    flex-shrink: 0;
-  }
-  .call-box .txt-wrap .label-sm {
-    color: #AEB8CC;
-    font-size: 0.92rem;
-    font-weight: 600;
-  }
-  .call-box a {
-    color: #fff;
-    font-family: 'Plus Jakarta Sans';
-    font-weight: 700;
-    font-size: 1.4rem;
-  }
-  .quote-form {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 38px;
-    box-shadow: 0 20px 50px rgba(16, 25, 46, 0.06);
-  }
-  .quote-form .form-title {
-    font-family: 'Plus Jakarta Sans';
-    font-weight: 700;
-    font-size: 1.3rem;
-    margin-bottom: 6px;
-  }
-  .quote-form .form-intro {
-    color: var(--slate);
-    font-size: 0.96rem;
-    margin-bottom: 22px;
-  }
-  .form-row { margin-bottom: 18px; }
-  .form-row label {
-    display: block;
-    font-weight: 700;
-    font-size: 0.95rem;
-    margin-bottom: 7px;
-    color: var(--navy);
-  }
-  .form-row input, .form-row select, .form-row textarea {
-    width: 100%;
-    background: var(--paper);
-    border: 1.5px solid var(--line-strong);
-    border-radius: 8px;
-    color: var(--navy);
-    padding: 12px 14px;
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-  }
-  .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
-    outline: none;
-    border-color: var(--navy);
-  }
-  .form-row textarea { resize: vertical; min-height: 90px; }
-  .form-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-  .btn-submit {
-    width: 100%;
-    background: var(--navy);
-    color: #fff;
-    border: none;
-    padding: 16px;
-    border-radius: 8px;
-    font-family: 'Inter';
-    font-weight: 700;
-    font-size: 1.05rem;
-    cursor: pointer;
-    margin-top: 4px;
-    transition: background 0.2s;
-    box-shadow: 0 6px 18px rgba(16, 25, 46, 0.15);
-  }
-  .btn-submit:hover { background: var(--navy-soft); }
-
-  .form-note {
-    margin-top: 14px;
-    font-size: 0.92rem;
-    color: var(--slate);
-    text-align: center;
-  }
-
-  @media (max-width: 900px) {
-    .quote-form { padding: 28px 22px; }
-  }
-  @media (max-width: 480px) {
-    .form-two { grid-template-columns: 1fr; }
-  }
-
-  /* ===== FOOTER ===== */
-  footer {
-    background: var(--navy);
-    color: #AEB8CC;
-    padding: 60px 32px 30px;
-  }
-  .footer-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr;
-    gap: 40px;
-  }
-  .footer-logo {
-    font-family: 'Plus Jakarta Sans';
-    font-weight: 800;
-    font-size: 1.4rem;
-    color: #fff;
-  }
-  .footer-logo span { color: var(--amber); }
-  .footer-tag { font-size: 0.98rem; color: #8792A8; margin-top: 10px; max-width: 320px; }
-  .footer-col h4 { color: #fff; font-size: 0.95rem; margin-bottom: 14px; }
-  .footer-col ul li { margin-bottom: 10px; font-size: 0.95rem; }
-  .footer-col ul li a:hover { color: #fff; }
-  .footer-bottom {
-    max-width: 1200px;
-    margin: 40px auto 0;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    font-size: 0.9rem;
-    color: #6B7690;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  @media (max-width: 720px) {
-    .footer-inner { grid-template-columns: 1fr; }
-  }
-
-  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible {
-    outline: 3px solid var(--amber);
-    outline-offset: 2px;
-  }
-</style>
+<link rel="stylesheet" href="/assets/styles.css">
 </head>
 <body>
 
@@ -810,9 +174,9 @@
 <nav>
   <div class="nav-logo">GET<span>MOVR</span></div>
   <div class="nav-links">
-    <a href="#services">Services</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#areas">Service Area</a>
+    <a href="/moving.html">Moving</a>
+    <a href="/junk-removal.html">Junk Removal</a>
+    <a href="/heavy-equipment.html">Heavy Equipment</a>
     <a href="#faq">FAQ</a>
     <a href="#quote" class="nav-cta">Get A Free Quote</a>
   </div>
@@ -988,7 +352,7 @@
   <div class="svc-grid">
     <div class="svc-card">
       <div class="svc-icon"><svg class="ico"><use href="#i-box"/></svg></div>
-      <h3>Moving</h3>
+      <h3><a href="/moving.html">Moving</a></h3>
       <p>Apartments, houses, and offices — packed and moved carefully, on schedule.</p>
       <ul>
         <li>Local &amp; long-distance moves</li>
@@ -996,10 +360,11 @@
         <li>Furniture disassembly &amp; reassembly</li>
       </ul>
       <div class="svc-note">Flat-rate quotes based on volume &amp; distance</div>
+      <a class="svc-more" href="/moving.html">More about moving &rarr;</a>
     </div>
     <div class="svc-card">
       <div class="svc-icon"><svg class="ico"><use href="#i-trash"/></svg></div>
-      <h3>Junk Removal</h3>
+      <h3><a href="/junk-removal.html">Junk Removal</a></h3>
       <p>Same-day availability in most cases. We recycle or donate what we can.</p>
       <ul>
         <li>Old furniture &amp; appliances</li>
@@ -1007,10 +372,11 @@
         <li>Estate &amp; garage cleanouts</li>
       </ul>
       <div class="svc-note">Priced by volume, not weight</div>
+      <a class="svc-more" href="/junk-removal.html">More about junk removal &rarr;</a>
     </div>
     <div class="svc-card">
       <div class="svc-icon"><svg class="ico"><use href="#i-forklift"/></svg></div>
-      <h3>Heavy Equipment</h3>
+      <h3><a href="/heavy-equipment.html">Heavy Equipment</a></h3>
       <p>Machinery, appliances, and oversized items moved safely with the right equipment.</p>
       <ul>
         <li>Appliance &amp; machinery transport</li>
@@ -1018,6 +384,7 @@
         <li>Careful loading &amp; delivery</li>
       </ul>
       <div class="svc-note">Quoted per job after an access &amp; equipment check</div>
+      <a class="svc-more" href="/heavy-equipment.html">More about heavy equipment &rarr;</a>
     </div>
   </div>
 </section>
@@ -1193,12 +560,12 @@
       <div class="footer-tag">Licensed, insured moving, junk removal, and heavy equipment transport across Toronto &amp; Mississauga.</div>
     </div>
     <div class="footer-col">
-      <h4>Company</h4>
+      <h4>Services</h4>
       <ul>
+        <li><a href="/moving.html">Moving</a></li>
+        <li><a href="/junk-removal.html">Junk Removal</a></li>
+        <li><a href="/heavy-equipment.html">Heavy Equipment</a></li>
         <li><a href="#quote">Get A Free Quote</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#areas">Service Area</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
     </div>
@@ -1217,103 +584,7 @@
   </div>
 </footer>
 
-<script>
-  const MAKE_WEBHOOK_URL = 'https://hook.us2.make.com/rho044dow3m3la38kqeiuw25wuf23zja';
-  // Optional: point this at a deployed instance of /backend to also store leads
-  // in the owned SQLite database (powers /admin). Safe to leave as-is — if the
-  // endpoint isn't reachable, this call fails silently and the Make webhook
-  // above still handles the actual form submission.
-  const BACKEND_API_URL = '/api/quotes';
-
-  // Address fields adapt to the service: junk removal is a pickup only, so it has
-  // no destination. Labels change per service so "from/to" reads naturally.
-  const ADDRESS_CONFIG = {
-    moving:     { from: 'Moving From',    to: 'Moving To',           showTo: true,  toRequired: true },
-    equipment:  { from: 'Pickup Address', to: 'Delivery Address',    showTo: true,  toRequired: true },
-    junk:       { from: 'Pickup Address', to: null,                  showTo: false, toRequired: false },
-    'not-sure': { from: 'Pickup Address', to: 'Destination Address', showTo: true,  toRequired: false },
-    '':         { from: 'Pickup Address', to: 'Destination Address', showTo: true,  toRequired: false }
-  };
-
-  const serviceSelect = document.getElementById('service');
-  const fromAddressLabel = document.getElementById('fromAddressLabel');
-  const toAddressLabel = document.getElementById('toAddressLabel');
-  const toAddressRow = document.getElementById('toAddressRow');
-  const toAddressInput = document.getElementById('toAddress');
-
-  function syncAddressFields() {
-    const config = ADDRESS_CONFIG[serviceSelect.value] || ADDRESS_CONFIG[''];
-
-    fromAddressLabel.textContent = config.from;
-    toAddressRow.hidden = !config.showTo;
-
-    if (config.showTo) {
-      toAddressLabel.textContent = config.toRequired ? config.to : config.to + ' (optional)';
-      // Keep required in sync with visibility — a hidden required input blocks
-      // submission with a validation message the user can't see or act on.
-      toAddressInput.required = config.toRequired;
-    } else {
-      toAddressInput.required = false;
-      toAddressInput.value = '';
-    }
-  }
-
-  serviceSelect.addEventListener('change', syncAddressFields);
-  syncAddressFields();
-
-  document.getElementById('quoteForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const form = e.target;
-    const submitBtn = form.querySelector('.btn-submit');
-    const originalBtnText = submitBtn.textContent;
-
-    const data = {
-      name: form.name.value,
-      phone: form.phone.value,
-      email: form.email.value,
-      service: form.service.value,
-      from_address: form.fromAddress.value,
-      to_address: form.toAddress.value,
-      date: form.date.value,
-      details: form.details.value,
-      submitted_at: new Date().toISOString(),
-      source: 'getmovr.ca quote form'
-    };
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending...';
-
-    // Best-effort mirror into the owned lead database; never blocks or affects the UI.
-    fetch(BACKEND_API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    }).catch(function() { /* backend not deployed here — ignore */ });
-
-    fetch(MAKE_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-      .then(function(response) {
-        if (!response.ok) throw new Error('Network response was not ok');
-        submitBtn.textContent = 'Sent! We\'ll be in touch soon.';
-        form.reset();
-        syncAddressFields(); // reset() clears the service select, so re-apply its field rules
-        setTimeout(function() {
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalBtnText;
-        }, 4000);
-      })
-      .catch(function(err) {
-        console.error('Form submission error:', err);
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-        alert('Something went wrong sending your request. Please call us directly at (437) 988-7234.');
-      });
-  });
-</script>
+<script src="/assets/site.js" defer></script>
 
 </body>
 </html>
