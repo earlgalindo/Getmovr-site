@@ -427,10 +427,11 @@
   .area .section-head .eyebrow { background: rgba(255,255,255,0.1); color: #E8C79A; }
   .area-groups {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
-    max-width: 800px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 36px 28px;
+    max-width: 1080px;
     margin: 0 auto;
+    align-items: start;
   }
   .area-group h3 { color: #fff; font-size: 1.05rem; margin-bottom: 14px; }
   .area-chips { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -450,7 +451,10 @@
   }
   .area-note a { color: #E8C79A; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
 
-  @media (max-width: 640px) {
+  @media (max-width: 900px) {
+    .area-groups { grid-template-columns: repeat(2, 1fr); max-width: 620px; }
+  }
+  @media (max-width: 460px) {
     .area-groups { grid-template-columns: 1fr; }
   }
 
