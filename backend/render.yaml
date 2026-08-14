@@ -3,9 +3,14 @@ services:
     name: movr-backend
     runtime: node
     plan: free
-    rootDir: backend
-    buildCommand: npm install
-    startCommand: npm start
+    # No rootDir on purpose. The server serves the marketing site from the repo
+    # root (index.html, the service pages, /assets), and Render excludes
+    # everything outside rootDir both at build time and at runtime — it also
+    # only auto-deploys when files under rootDir change, so site-only commits
+    # were being ignored entirely. Commands below point into backend/ instead.
+    autoDeploy: true
+    buildCommand: npm install --prefix backend
+    startCommand: node backend/server.js
     envVars:
       - key: ADMIN_API_KEY
         generateValue: true
